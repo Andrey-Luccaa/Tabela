@@ -27,14 +27,12 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* --- TÍTULO E LOGO PRINCIPAL --- */
 .ctitle {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 20px 0;
-    text-align: center;
 }
 
 .ititle img {
@@ -43,11 +41,9 @@ body {
     cursor: pointer;
 }
 
-.ititle img:hover { 
-    transform: scale(1.1); 
-}
+.ititle img:hover { transform: scale(1.1); }
 
-/* --- TABELA --- */
+/* TABELA */
 .table-container {
     width: 100%;
     overflow-x: auto;
@@ -60,12 +56,12 @@ table {
     margin: 20px auto;
     border-collapse: collapse;
     backdrop-filter: blur(10px);
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
     background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 tr {
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: background 0.3s ease;
 }
 
 th, td {
@@ -80,69 +76,58 @@ th, td {
     color: #aaa;
 }
 
-/* --- COLUNA DOS TIMES (LOGO + NOME) --- */
 td:first-child {
     text-align: left;
-    min-width: 220px;
-    background: rgba(0, 0, 0, 0.2);
+    min-width: 240px;
+    background: rgba(0, 0, 0, 0.1);
 }
 
+/* INFO DO TIME E EFEITOS DE HOVER */
 .team-info {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-/* Faz a logo e o texto terem a mesma transição */
-.team-info img, 
-.team-info span {
-    display: inline-block;
-    transition: all 0.3s ease;
-    cursor: pointer;
+.pos-num {
+    min-width: 35px;
+    opacity: 0.5;
+    font-size: 0.9rem;
 }
 
 .timelogo {
     width: 25px;
     height: 25px;
     object-fit: contain;
+    transition: all 0.3s ease;
 }
 
-/* Efeito ao passar o mouse: Logo e Nome se movem e brilham juntos */
-.team-info:hover img,
-.team-info:hover span {
+.team-info span:last-child {
+    transition: all 0.3s ease;
+}
+
+/* O "Pulo do Gato": Ao passar o mouse na linha, logo e texto brilham e se movem */
+tr:hover .timelogo, 
+tr:hover .team-info span:last-child {
     transform: translateX(8px);
-    color: #fff;
-    text-shadow: 0 0 10px #00ff88;
+    text-shadow: 0 0 10px var(--time-color);
 }
 
-.team-info:hover img {
-    filter: drop-shadow(0 0 5px #00ff88); /* Brilho suave na logo */
+tr:hover .timelogo {
+    filter: drop-shadow(0 0 8px var(--time-color));
 }
 
-/* --- PONTUAÇÃO E EDIÇÃO --- */
+tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* PONTUAÇÃO DESTAQUE */
 td:nth-child(2) {
     font-weight: bold;
     color: #00ff88;
 }
 
-[contenteditable="true"] {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
-    outline: none;
-    transition: 0.3s;
-}
-
-[contenteditable="true"]:focus {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 5px white;
-}
-
-/* Efeito visual na linha inteira quando está editando algo nela */
-tr:has([contenteditable="true"]:focus) {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* --- BOTÕES --- */
+/* BOTÃO RESET */
 .btn-reset {
     padding: 10px 20px;
     cursor: pointer;
