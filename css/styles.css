@@ -14,133 +14,181 @@
 body {
     min-height: 100vh;
     color: white;
-    background: linear-gradient(-45deg, #020420, #050a30, #000c66, #020420);
+    /* Gradiente Ultra-Vibrante: Azul profundo para o Roxo Elétrico */
+    background: linear-gradient(-45deg, #05014a, #120078, #4e00c2, #000232);
     background-size: 400% 400%;
     font-family: 'Unispace', sans-serif; 
-    animation: gradient 10s linear infinite;
+    animation: gradient 8s ease infinite; 
     overflow-x: hidden;
 }
 
 @keyframes gradient {
     0% { background-position: 0% 50%; }
-    50% { background-position: 50% 100%; }
+    50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
+/* --- TÍTULO E LOGO DO BRASILEIRÃO --- */
 .ctitle {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px 0;
+    padding: 30px 0;
+    text-align: center;
 }
 
 .ititle img {
-    width: 120px;
-    transition: transform 0.5s ease;
+    width: 130px;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
 }
 
-.ititle img:hover { transform: scale(1.1); }
+.ititle img:hover { 
+    transform: scale(1.15) rotate(2deg); 
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.5));
+}
 
-/* TABELA */
+/* --- CONTAINER DA TABELA --- */
 .table-container {
     width: 100%;
     overflow-x: auto;
-    padding: 0 20px 50px 20px;
+    padding: 0 20px 80px 20px;
 }
 
 table {
     width: 100%;
-    max-width: 1100px;
+    max-width: 1150px;
     margin: 20px auto;
     border-collapse: collapse;
-    backdrop-filter: blur(10px);
-    background: rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(15px); /* Efeito Vidro Profundo */
+    background: rgba(255, 255, 255, 0.03); 
+    box-shadow: 0px 25px 50px rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
+/* --- ESTILO DAS LINHAS E CÉLULAS --- */
 tr {
-    transition: background 0.3s ease;
+    transition: all 0.4s ease;
 }
 
 th, td {
-    padding: 12px 10px;
+    padding: 15px 12px;
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 #titulos th {
-    background: rgba(0, 0, 0, 0.8);
-    font-size: 0.8rem;
-    color: #aaa;
+    background: rgba(0, 0, 0, 0.85);
+    font-size: 0.85rem;
+    color: #00d9ff; /* Azul Ciano para os títulos */
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
+/* Coluna Principal (Posição e Nome do Time) */
 td:first-child {
     text-align: left;
-    min-width: 240px;
-    background: rgba(0, 0, 0, 0.1);
+    min-width: 250px;
+    background: rgba(0, 0, 0, 0.2);
 }
 
-/* INFO DO TIME E EFEITOS DE HOVER */
 .team-info {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
 }
 
 .pos-num {
-    min-width: 35px;
-    opacity: 0.5;
-    font-size: 0.9rem;
+    min-width: 40px;
+    font-weight: bold;
+    opacity: 0.4;
+    font-size: 0.85rem;
+    transition: opacity 0.3s;
 }
 
 .timelogo {
-    width: 25px;
-    height: 25px;
+    width: 28px;
+    height: 28px;
     object-fit: contain;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .team-info span:last-child {
+    font-weight: 500;
     transition: all 0.3s ease;
 }
 
-/* O "Pulo do Gato": Ao passar o mouse na linha, logo e texto brilham e se movem */
-tr:hover .timelogo, 
-tr:hover .team-info span:last-child {
-    transform: translateX(8px);
-    text-shadow: 0 0 10px var(--time-color);
+/* --- EFEITO HOVER VIBRANTE (Onde a mágica acontece) --- */
+tr:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+tr:hover .pos-num {
+    opacity: 1;
+    color: var(--time-color);
 }
 
 tr:hover .timelogo {
-    filter: drop-shadow(0 0 8px var(--time-color));
+    transform: translateX(10px) scale(1.3);
+    filter: drop-shadow(0 0 12px var(--time-color)) brightness(1.2);
 }
 
-tr:hover {
-    background: rgba(255, 255, 255, 0.05);
+tr:hover .team-info span:last-child {
+    transform: translateX(12px);
+    color: #fff;
+    /* Brilho duplo: a cor do time + um brilho branco central */
+    text-shadow: 0 0 15px var(--time-color), 0 0 5px #ffffff;
 }
 
-/* PONTUAÇÃO DESTAQUE */
+/* --- DESTAQUES DE COLUNA --- */
+/* Coluna de Pontos (P) */
 td:nth-child(2) {
     font-weight: bold;
-    color: #00ff88;
+    color: #00ff88; /* Verde Neon padrão */
+    font-size: 1.1rem;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
 }
 
-/* BOTÃO RESET */
+/* --- ELEMENTOS EDITÁVEIS --- */
+[contenteditable="true"] {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 4px;
+    outline: none;
+    transition: 0.3s;
+}
+
+[contenteditable="true"]:focus {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px var(--time-color, white);
+}
+
+/* Linha inteira em destaque ao editar */
+tr:has([contenteditable="true"]:focus) {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* --- BOTÕES --- */
 .btn-reset {
-    padding: 10px 20px;
+    margin-top: 20px;
+    padding: 12px 25px;
     cursor: pointer;
     background: transparent;
     color: white;
-    border: 1px solid rgba(255,255,255,0.4);
-    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
     font-family: 'Unispace', sans-serif;
-    transition: 0.3s;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
 }
 
 .btn-reset:hover {
     background: white;
-    color: black;
+    color: #05014a;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
 }
-
