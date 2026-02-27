@@ -126,5 +126,4 @@ function renderizarTabela() {
     });
 }
 
-
 window.onload = renderizarTabela;
