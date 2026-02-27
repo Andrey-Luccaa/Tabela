@@ -3,8 +3,8 @@ const listaOriginal = [
     { nome: "ATLÉTICO-MG", id: "atleticomg", logo: "Atlético Mineiro.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 },
     { nome: "BAHIA", id: "bahia", logo: "Bahia.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 },
     { nome: "BOTAFOGO", id: "botafogo", logo: "Botafogo.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 },
-    { nome: "BRAGANTINO", id: "bragantino", logo: "bragantino.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 },
-    { nome: "CHAPECOENSE", id: "chapecoense", logo: "chapecoense.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 },
+    { nome: "BRAGANTINO", id: "bragantino", logo: "Bragantino.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 },
+    { nome: "CHAPECOENSE", id: "chapecoense", logo: "Chapecoense.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 },
     { nome: "CORINTHIANS", id: "corinthians", logo: "Corinthians.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 },
     { nome: "CORITIBA", id: "coritiba", logo: "Coritiba.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 },
     { nome: "CRUZEIRO", id: "cruzeiro", logo: "Cruzeiro.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 },
@@ -125,5 +125,6 @@ function renderizarTabela() {
         });
     });
 }
+
 
 window.onload = renderizarTabela;
