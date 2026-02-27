@@ -137,7 +137,7 @@ td:nth-child(2) {
 .team-info:hover span {
     color: #fff; /* Cor que você já usa nos pontos */
     transform: translateX(8px);
-    text-shadow: 0 0 10px #fff;
+    text-shadow: 0 0 10px #00ff88;
 }
 
 /* Efeito visual na linha sendo editada */
@@ -145,3 +145,4 @@ tr:has([contenteditable="true"]:focus) {
     background: rgba(255, 255, 255, 0.1);
     transition: background 0.3s;
 }
+
