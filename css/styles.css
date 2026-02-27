@@ -14,7 +14,7 @@
 body {
     min-height: 100vh;
     color: white;
-    background: linear-gradient(-45deg, #080c8f, #00005b, #1916c0, #020783, #2c2c42);
+    background: linear-gradient(-45deg, #020420, #050a30, #000c66, #020420);
     background-size: 400% 400%;
     font-family: 'Unispace', sans-serif; 
     animation: gradient 10s linear infinite;
@@ -143,3 +143,4 @@ td:nth-child(2) {
     background: white;
     color: black;
 }
+
