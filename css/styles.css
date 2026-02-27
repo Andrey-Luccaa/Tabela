@@ -1,0 +1,128 @@
+@font-face {
+    font-family: 'Unispace';
+    src: url('../font/Unispace Rg.otf') format('opentype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    color: white;
+    background: linear-gradient(-45deg, #080c8f, #00005b, #1916c0, #020783, #2c2c42);
+    background-size: 400% 400%;
+    font-family: 'Unispace', sans-serif; 
+    animation: gradient 10s linear infinite;
+    overflow-x: hidden;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 50% 100%; }
+    100% { background-position: 0% 50%; }
+}
+
+.ctitle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.ititle img {
+    width: 120px;
+    transition: transform 0.5s ease;
+    cursor: pointer;
+}
+
+.ititle img:hover { transform: scale(1.1); }
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 0 20px 50px 20px;
+}
+
+table {
+    width: 100%;
+    max-width: 1100px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Transição suave para as linhas */
+tr {
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+th, td {
+    padding: 12px 10px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#titulos th {
+    background: rgba(0, 0, 0, 0.8);
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+td:first-child {
+    text-align: left;
+    min-width: 220px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.team-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.timelogo {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+td:nth-child(2) {
+    font-weight: bold;
+    color: #00ff88;
+}
+
+[contenteditable="true"] {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    outline: none;
+    transition: 0.3s;
+}
+
+[contenteditable="true"]:focus {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 5px white;
+}
+
+.btn-reset {
+    padding: 10px 20px;
+    cursor: pointer;
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 4px;
+    font-family: 'Unispace', sans-serif;
+    transition: 0.3s;
+}
+
+.btn-reset:hover {
+    background: white;
+    color: black;
+}
