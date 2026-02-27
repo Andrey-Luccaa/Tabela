@@ -128,3 +128,20 @@ td:nth-child(2) {
     color: black;
 
 }
+.team-info span {
+    display: inline-block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.team-info:hover span {
+    color: #fff; /* Cor que você já usa nos pontos */
+    transform: translateX(8px);
+    text-shadow: 0 0 10px #fff;
+}
+
+/* Efeito visual na linha sendo editada */
+tr:has([contenteditable="true"]:focus) {
+    background: rgba(255, 255, 255, 0.1);
+    transition: background 0.3s;
+}
