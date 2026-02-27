@@ -21,68 +21,51 @@ const listaOriginal = [
     { nome: "VITÓRIA", id: "vitoria", logo: "Vitória.png", v: 0, e: 0, d: 0, gp: 0, gc: 0 }
 ];
 
+// Mapeamento de cores para o efeito de brilho
+const coresTimes = {
+    athletico: "#ff0000", atleticomg: "#ffffff", bahia: "#0056a3", botafogo: "#ffffff",
+    bragantino: "#ffffff", chapecoense: "#00914d", corinthians: "#ffffff", coritiba: "#008041",
+    cruzeiro: "#0056a3", flamengo: "#c60b1e", fluminense: "#83001e", gremio: "#0d80bf",
+    internacional: "#e30613", mirassol: "#ffcc00", palmeiras: "#006437", remo: "#1a233b",
+    santos: "#ffffff", saopaulo: "#ff0000", vasco: "#ffffff", vitoria: "#ff0000"
+};
+
 let dadosTimes = [...listaOriginal];
 
-// Função auxiliar para normalizar nomes (remove acentos e espaços extras)
 function normalizarTexto(texto) {
-    return texto
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toUpperCase()
-        .trim();
-}
-
-function limparTudo() {
-    if (confirm("Deseja recarregar os dados da planilha?")) {
-        carregarDadosDaPlanilha();
-    }
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
 }
 
 async function carregarDadosDaPlanilha() {
     try {
         const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuYYrJrM1Ozyzllocl72jV0AsJON6oWCsQCvhIC0oE4mJWrcrcDFYq_ghSFwjxX2fsYtFi_i2vmHD-/pub?output=csv&gid=2083338507";
-
         const resposta = await fetch(sheetURL);
         if (!resposta.ok) throw new Error("Erro ao acessar Google Sheets.");
 
         const texto = (await resposta.text()).replace(/^\uFEFF/, '');
         const linhas = texto.split(/\r?\n/).filter(l => l.trim().length > 0);
         const corpo = linhas.slice(1);
-
         const mapaPlanilha = {};
 
         corpo.forEach(linha => {
             const separador = linha.includes(';') ? ';' : ',';
             const col = linha.split(separador);
-
             if (col.length >= 7) {
-                // Remove aspas e normaliza o nome vindo do CSV
                 const nomeCSV = normalizarTexto(col[1].replace(/"/g, ''));
-
                 mapaPlanilha[nomeCSV] = {
-                    v: parseInt(col[2]) || 0,
-                    e: parseInt(col[3]) || 0,
-                    d: parseInt(col[4]) || 0,
-                    gp: parseInt(col[5]) || 0,
-                    gc: parseInt(col[6]) || 0
+                    v: parseInt(col[2]) || 0, e: parseInt(col[3]) || 0, d: parseInt(col[4]) || 0,
+                    gp: parseInt(col[5]) || 0, gc: parseInt(col[6]) || 0
                 };
             }
         });
 
-        // Atualiza dadosTimes comparando os nomes normalizados
         dadosTimes = listaOriginal.map(time => {
             const nomeChave = normalizarTexto(time.nome);
             const novosValores = mapaPlanilha[nomeChave];
-            
-            if (novosValores) {
-                return { ...time, ...novosValores };
-            }
-            return time;
+            return novosValores ? { ...time, ...novosValores } : time;
         });
 
-        console.log("Dados processados:", dadosTimes);
         renderizarTabela();
-
     } catch (erro) {
         console.error("Erro crítico:", erro.message);
         renderizarTabela();
@@ -105,13 +88,11 @@ function renderizarTabela() {
         jogos: t.v + t.e + t.d,
         sg: t.gp - t.gc,
         aproveitamento: (t.v + t.e + t.d) > 0 
-            ? (((t.v * 3 + t.e) / ((t.v + t.e + t.d) * 3)) * 100).toFixed(1) 
-            : "0.0"
+            ? (((t.v * 3 + t.e) / ((t.v + t.e + t.d) * 3)) * 100).toFixed(1) : "0.0"
     })).sort((a, b) => {
         if (b.pontos !== a.pontos) return b.pontos - a.pontos;
         if (b.v !== a.v) return b.v - a.v;
         if (b.sg !== a.sg) return b.sg - a.sg;
-        if (b.gp !== a.gp) return b.gp - a.gp;
         return a.nome.localeCompare(b.nome);
     });
 
@@ -120,11 +101,15 @@ function renderizarTabela() {
     timesProcessados.forEach((time, index) => {
         const tr = document.createElement('tr');
         tr.dataset.id = time.id;
+        
+        // Define a cor do time para o CSS usar no hover
+        const corHex = coresTimes[time.id] || "#ffffff";
+        tr.style.setProperty('--time-color', corHex);
 
         tr.innerHTML = `
             <td>
                 <div class="team-info">
-                    <span style="min-width: 30px; opacity: 0.5;">${index + 1}º</span>
+                    <span class="pos-num">${index + 1}º</span>
                     <img src="image/${time.logo}" class="timelogo">
                     <span>${time.nome}</span>
                 </div>
@@ -148,17 +133,16 @@ function renderizarTabela() {
         tbody.appendChild(tr);
     });
 
+    // Lógica de animação de troca de posição
     requestAnimationFrame(() => {
         tbody.querySelectorAll('tr').forEach(tr => {
             const id = tr.dataset.id;
             const antiga = posicoesAntigas[id];
             const nova = tr.getBoundingClientRect().top;
-
             if (antiga !== undefined && antiga !== nova) {
                 const delta = antiga - nova;
                 tr.style.transition = 'none';
                 tr.style.transform = `translateY(${delta}px)`;
-
                 requestAnimationFrame(() => {
                     tr.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
                     tr.style.transform = 'translateY(0)';
