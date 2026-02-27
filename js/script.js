@@ -23,11 +23,26 @@ const listaOriginal = [
 
 // Mapeamento de cores para o efeito de brilho
 const coresTimes = {
-    athletico: "#ff0000", atleticomg: "#ffffff", bahia: "#0056a3", botafogo: "#ffffff",
-    bragantino: "#ffffff", chapecoense: "#00914d", corinthians: "#ffffff", coritiba: "#008041",
-    cruzeiro: "#0056a3", flamengo: "#c60b1e", fluminense: "#83001e", gremio: "#0d80bf",
-    internacional: "#e30613", mirassol: "#ffcc00", palmeiras: "#006437", remo: "#1a233b",
-    santos: "#ffffff", saopaulo: "#ff0000", vasco: "#ffffff", vitoria: "#ff0000"
+    athletico: "#ff0033",     // Vermelho Vivo
+    atleticomg: "#ffffff",    // Branco Puro
+    bahia: "#00a2ff",         // Azul Cyan
+    botafogo: "#e0e0e0",      // Prata Brilhante
+    bragantino: "#ff4d4d",    // Vermelho Touro
+    chapecoense: "#00ff73",   // Verde Esmeralda
+    corinthians: "#ffffff",   
+    coritiba: "#00ff88",      
+    cruzeiro: "#2e66ff",      // Azul Elétrico
+    flamengo: "#ff0000",      
+    fluminense: "#ff0055",    // Grená Vibrante
+    gremio: "#00d9ff",        // Azul Celeste Neon
+    internacional: "#ff1100", 
+    mirassol: "#ffe600",      // Amarelo Limão
+    palmeiras: "#00ff44",     // Verde Neon
+    remo: "#3366ff",          
+    santos: "#f0f0f0",        
+    saopaulo: "#ff2222",      
+    vasco: "#ffffff",         
+    vitoria: "#ff0044"
 };
 
 let dadosTimes = [...listaOriginal];
@@ -153,3 +168,4 @@ function renderizarTabela() {
 }
 
 window.onload = carregarDadosDaPlanilha;
+
