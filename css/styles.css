@@ -94,6 +94,7 @@ td:first-child {
     text-align: left;
     min-width: 250px;
     background: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
 .team-info {
@@ -192,3 +193,4 @@ tr:has([contenteditable="true"]:focus) {
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
     transform: translateY(-2px);
 }
+
