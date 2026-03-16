@@ -141,8 +141,8 @@ function renderizarTabela() {
         `;
 
         if (index < 4) tr.style.borderLeft = "4px solid #00ff88";
-        else if (index >= 4 && index <= 5) tr.style.borderLeft = "4px solid #e5ff00";
-        else if (index >= 6 && index <= 11) tr.style.borderLeft = "4px solid #006FFF";
+        else if (index == 4) tr.style.borderLeft = "4px solid #e5ff00";
+        else if (index >= 5 && index <= 10) tr.style.borderLeft = "4px solid #006FFF";
         else if (index >= 16) tr.style.borderLeft = "4px solid #ff4d4d";
 
         tbody.appendChild(tr);
