@@ -24,14 +24,29 @@ const listaOriginal = [
 ];
 
 const coresTimes = {
+    athletico: "#ff0033",
+    atleticomg: "#ffffff",
     bahia: "#00a2ff",
+    botafogo: "#e0e0e0",
+    bragantino: "#ff4d4d",
+    chapecoense: "#00ff73",
+    corinthians: "#ffffff",
+    coritiba: "#00ff88",
+    cruzeiro: "#2e66ff",
     flamengo: "#ff0000",
+    fluminense: "#ff0055",
+    gremio: "#00d9ff",
+    internacional: "#ff1100",
+    mirassol: "#ffe600",
     palmeiras: "#00ff44",
+    remo: "#3366ff",
+    santos: "#f0f0f0",
+    saopaulo: "#ff2222",
+    vasco: "#ffffff",
     vitoria: "#ff0044"
 };
 
 let dadosTimes = [...listaOriginal];
-let pontuacoesAntigas = {};
 
 function normalizarTexto(texto) {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
@@ -41,15 +56,16 @@ async function carregarDadosDaPlanilha() {
     try {
         const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuYYrJrM1Ozyzllocl72jV0AsJON6oWCsQCvhIC0oE4mJWrcrcDFYq_ghSFwjxX2fsYtFi_i2vmHD-/pub?output=csv&gid=2083338507";
         const res = await fetch(url);
-        const texto = await res.text();
+        const texto = (await res.text()).replace(/^\uFEFF/, '');
 
-        const linhas = texto.split("\n").slice(1);
-
+        const linhas = texto.split(/\r?\n/).slice(1);
         const mapa = {};
 
         linhas.forEach(l => {
-            const col = l.split(",");
-            const nome = normalizarTexto(col[1] || "");
+            const sep = l.includes(";") ? ";" : ",";
+            const col = l.split(sep);
+
+            const nome = normalizarTexto((col[1] || "").replace(/"/g, ""));
 
             mapa[nome] = {
                 v: parseInt(col[2]) || 0,
@@ -75,18 +91,34 @@ async function carregarDadosDaPlanilha() {
 
 function renderizarTabela() {
     const tbody = document.querySelector("tbody");
-    tbody.innerHTML = "";
+    if (!tbody) return;
+
+    const posicoesAntigas = {};
+    tbody.querySelectorAll("tr").forEach(tr => {
+        const id = tr.dataset.id;
+        if (id) posicoesAntigas[id] = tr.getBoundingClientRect().top;
+    });
 
     const times = dadosTimes.map(t => ({
         ...t,
         pontos: t.v * 3 + t.e,
         jogos: t.v + t.e + t.d,
         sg: t.gp - t.gc,
-        aproveitamento: ((t.v * 3 + t.e) / ((t.v + t.e + t.d) * 3) * 100 || 0).toFixed(1)
-    })).sort((a, b) => b.pontos - a.pontos);
+        aproveitamento: (t.v + t.e + t.d) > 0
+            ? (((t.v * 3 + t.e) / ((t.v + t.e + t.d) * 3)) * 100).toFixed(1)
+            : "0.0"
+    })).sort((a, b) => {
+        if (b.pontos !== a.pontos) return b.pontos - a.pontos;
+        if (b.v !== a.v) return b.v - a.v;
+        if (b.sg !== a.sg) return b.sg - a.sg;
+        return a.nome.localeCompare(b.nome);
+    });
+
+    tbody.innerHTML = "";
 
     times.forEach((time, index) => {
         const tr = document.createElement("tr");
+        tr.dataset.id = time.id;
 
         tr.style.setProperty("--time-color", coresTimes[time.id] || "#fff");
 
@@ -96,8 +128,14 @@ function renderizarTabela() {
         else if (index >= 16) tr.classList.add("rebaixamento");
 
         tr.innerHTML = `
-            <td>${index + 1}º - ${time.nome}</td>
-            <td>${time.pontos}</td>
+            <td>
+                <div class="team-info">
+                    <span class="pos-num">${index + 1}º</span>
+                    <img src="image/${time.logo}" class="timelogo">
+                    <span>${time.nome}</span>
+                </div>
+            </td>
+            <td><strong>${time.pontos}</strong></td>
             <td>${time.jogos}</td>
             <td>${time.v}</td>
             <td>${time.e}</td>
@@ -124,9 +162,32 @@ function renderizarTabela() {
 
         tbody.appendChild(tr);
     });
+
+    // animação de movimento
+    requestAnimationFrame(() => {
+        tbody.querySelectorAll("tr").forEach(tr => {
+            const id = tr.dataset.id;
+            const antiga = posicoesAntigas[id];
+            const nova = tr.getBoundingClientRect().top;
+
+            if (antiga !== undefined && antiga !== nova) {
+                const delta = antiga - nova;
+
+                tr.style.transition = "none";
+                tr.style.transform = `translateY(${delta}px)`;
+
+                requestAnimationFrame(() => {
+                    tr.style.transition = window.innerWidth <= 768
+                        ? "transform 0.3s ease-out"
+                        : "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
+                    tr.style.transform = "translateY(0)";
+                });
+            }
+        });
+    });
 }
 
-// liberar áudio mobile
+// liberar áudio no mobile
 document.body.addEventListener("touchstart", () => {
     if (clickSound) {
         clickSound.play().then(() => {
