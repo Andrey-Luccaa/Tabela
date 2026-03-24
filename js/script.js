@@ -88,48 +88,30 @@ async function carregarDadosDaPlanilha() {
 }
 
 function renderizarTabela() {
-    const tbody = document.querySelector('tbody');
-    if (!tbody) return;
+    const tbody = document.querySelector("tbody");
+    tbody.innerHTML = "";
 
-    const posicoesAntigas = {};
-    tbody.querySelectorAll('tr').forEach(tr => {
-        const id = tr.dataset.id;
-        if (id) posicoesAntigas[id] = tr.getBoundingClientRect().top;
-    });
-
-    const timesProcessados = dadosTimes.map(t => ({
+    const times = listaOriginal.map(t => ({
         ...t,
-        pontos: (t.v * 3) + (t.e * 1),
+        pontos: t.v * 3 + t.e,
         jogos: t.v + t.e + t.d,
         sg: t.gp - t.gc,
-        aproveitamento: (t.v + t.e + t.d) > 0 
-            ? (((t.v * 3 + t.e) / ((t.v + t.e + t.d) * 3)) * 100).toFixed(1) : "0.0"
-    })).sort((a, b) => {
-        if (b.pontos !== a.pontos) return b.pontos - a.pontos;
-        if (b.v !== a.v) return b.v - a.v;
-        if (b.sg !== a.sg) return b.sg - a.sg;
-        return a.nome.localeCompare(b.nome);
-    });
+        aproveitamento: ((t.v * 3 + t.e) / ((t.v + t.e + t.d) * 3) * 100).toFixed(1)
+    })).sort((a, b) => b.pontos - a.pontos);
 
-    tbody.innerHTML = '';
+    times.forEach((time, index) => {
+        const tr = document.createElement("tr");
 
-    timesProcessados.forEach((time, index) => {
-        const tr = document.createElement('tr');
-        tr.dataset.id = time.id;
-        
-        // Define a cor do time para o CSS usar no hover
-        const corHex = coresTimes[time.id] || "#ffffff";
-        tr.style.setProperty('--time-color', corHex);
+        tr.style.setProperty("--time-color", coresTimes[time.id] || "#fff");
+
+        if (index < 4) tr.classList.add("top4", "libertadores");
+        else if (index === 4) tr.classList.add("pre-liberta");
+        else if (index >= 5 && index <= 10) tr.classList.add("sulamericana");
+        else tr.classList.add("rebaixamento");
 
         tr.innerHTML = `
-            <td>
-                <div class="team-info">
-                    <span class="pos-num">${index + 1}º</span>
-                    <img src="image/${time.logo}" class="timelogo">
-                    <span>${time.nome}</span>
-                </div>
-            </td>
-            <td><strong>${time.pontos}</strong></td>
+            <td>${index + 1}º - ${time.nome}</td>
+            <td>${time.pontos}</td>
             <td>${time.jogos}</td>
             <td>${time.v}</td>
             <td>${time.e}</td>
@@ -137,35 +119,38 @@ function renderizarTabela() {
             <td>${time.gp}</td>
             <td>${time.gc}</td>
             <td>${time.sg}</td>
-            <td>${time.aproveitamento}%</td>
+            <td>
+                <div class="aproveitamento-bar">
+                    <div class="fill" style="width:${time.aproveitamento}%"></div>
+                </div>
+            </td>
         `;
 
-        if (index < 4) tr.style.borderLeft = "4px solid #00ff88";
-        else if (index == 4) tr.style.borderLeft = "4px solid #e5ff00";
-        else if (index >= 5 && index <= 10) tr.style.borderLeft = "4px solid #006FFF";
-        else if (index >= 16) tr.style.borderLeft = "4px solid #ff4d4d";
+        tr.addEventListener("click", () => {
+            if (clickSound) {
+                clickSound.currentTime = 0;
+                clickSound.play().catch(() => {});
+            }
+
+            tr.classList.add("clicked");
+            setTimeout(() => tr.classList.remove("clicked"), 300);
+        });
 
         tbody.appendChild(tr);
     });
-
-    // Lógica de animação de troca de posição
-    requestAnimationFrame(() => {
-        tbody.querySelectorAll('tr').forEach(tr => {
-            const id = tr.dataset.id;
-            const antiga = posicoesAntigas[id];
-            const nova = tr.getBoundingClientRect().top;
-            if (antiga !== undefined && antiga !== nova) {
-                const delta = antiga - nova;
-                tr.style.transition = 'none';
-                tr.style.transform = `translateY(${delta}px)`;
-                requestAnimationFrame(() => {
-                    tr.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                    tr.style.transform = 'translateY(0)';
-                });
-            }
-        });
-    });
 }
+
+// liberar áudio no mobile
+document.body.addEventListener("touchstart", () => {
+    if (clickSound) {
+        clickSound.play().then(() => {
+            clickSound.pause();
+            clickSound.currentTime = 0;
+        }).catch(() => {});
+    }
+}, { once: true });
+
+renderizarTabela();
 
 window.onload = carregarDadosDaPlanilha;
 
