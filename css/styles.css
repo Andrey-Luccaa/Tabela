@@ -33,16 +33,13 @@ body {
     align-items: center;
     justify-content: center;
     gap: 15px;
+    flex-direction: column;
     margin: 20px;
     text-align: center;
 }
 
 #logo-brasileirao {
     width: 60px;
-}
-
-#logo-brasileirao img{
-    box-shadow: inset 0px 0px 10px 5px #fff;
 }
 
 /* CONTAINER */
