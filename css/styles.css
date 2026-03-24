@@ -111,18 +111,10 @@ td {
 tr.clicked .timelogo {
     transform: scale(1.4);
 
-    background: radial-gradient(
-        circle,
-        var(--time-color) 0%,
-        rgba(255,255,255,0.15) 30%,
-        rgba(255,255,255,0.05) 55%,
-        transparent 80%
-    );
-
     box-shadow: 
+        inset 0 0 14px var(--time-color),
         inset 0 0 25px var(--time-color),
-        inset 0 0 40px rgba(0,0,0,0.6),
-        0 0 12px var(--time-color);
+        0 0 12px var(--highlight-color);
 }
 
 /* LINHA */
