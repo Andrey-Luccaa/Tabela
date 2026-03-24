@@ -125,12 +125,18 @@ function renderizarTabela() {
         const corTime = coresTimes[time.id] || "#fff";
         let corDestaque = corTime;
 
-        // define destaque por posição
-        if (index < 4) {
-            corDestaque = "#22c55e"; // verde
-        } else if (index >= 16) {
-            corDestaque = "#ef4444"; // vermelho
-        }
+        const corTime = coresTimes[time.id] || "#fff";
+let corDestaque = corTime;
+
+// define destaque por posição
+if (index < 4) {
+    corDestaque = "#22c55e"; // verde
+} else if (index >= 16) {
+    corDestaque = "#ef4444"; // vermelho
+}
+
+tr.style.setProperty("--time-color", corTime);
+tr.style.setProperty("--highlight-color", corDestaque);
 
 tr.style.setProperty("--time-color", corTime);
 tr.style.setProperty("--highlight-color", corDestaque);
