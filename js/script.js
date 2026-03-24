@@ -25,12 +25,12 @@ const listaOriginal = [
 
 const coresTimes = {
     athletico: "#ff0033",
-    atleticomg: "#ffffff",
+    atleticomg: "#F0F0F0",
     bahia: "#00a2ff",
     botafogo: "#e0e0e0",
     bragantino: "#ff4d4d",
     chapecoense: "#00ff73",
-    corinthians: "#ffffff",
+    corinthians: "#F0F0F0",
     coritiba: "#00ff88",
     cruzeiro: "#2e66ff",
     flamengo: "#ff0000",
@@ -40,9 +40,9 @@ const coresTimes = {
     mirassol: "#ffe600",
     palmeiras: "#00ff44",
     remo: "#3366ff",
-    santos: "#f0f0f0",
+    santos: "#F0F0F0",
     saopaulo: "#ff2222",
-    vasco: "#ffffff",
+    vasco: "#F0F0F0",
     vitoria: "#ae0c00"
 };
 
