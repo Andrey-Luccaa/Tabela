@@ -15,7 +15,7 @@ body {
     min-height: 100vh;
     color: white;
     /* Gradiente Ultra-Vibrante: Azul profundo para o Roxo Elétrico */
-    background: linear-gradient(-45deg, #05014a, #120078, #4e00c2, #000232);
+    background: linear-gradient(-45deg, #020617, #0f172a, #1e293b, #020617);
     background-size: 400% 400%;
     font-family: 'Unispace', sans-serif; 
     animation: gradient 8s ease infinite; 
