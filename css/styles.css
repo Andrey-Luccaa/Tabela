@@ -93,10 +93,8 @@ td {
     height: 28px;
     object-fit: contain;
     object-position: center;
-    background: white;
-    border-radius: 50%;
+    border-radius: 75%;
     padding: 3px;
-
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
