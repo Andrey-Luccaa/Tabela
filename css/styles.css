@@ -40,7 +40,7 @@ body {
 
 #logo-brasileirao {
     width: 120px;
-    transition: 0.5 linear;
+    transition: 1.5s linear;
 }
 
 #logo-brasileirao:hover{
