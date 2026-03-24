@@ -40,6 +40,16 @@ body {
 
 #logo-brasileirao {
     width: 60px;
+    transition: 2s linear;
+}
+
+#logo-brasileirao:hover{
+    transform:scale(1.2);
+}
+
+#logo-brasileirao:active {
+    transform: scale(0.9);
+    transform: rotate(45deg);
 }
 
 /* CONTAINER */
