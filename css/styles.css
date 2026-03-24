@@ -39,6 +39,7 @@ body {
 
 #logo-brasileirao {
     width: 60px;
+    box-shadow: inset 0px 0px 10px 5px #fff;
 }
 
 /* CONTAINER */
