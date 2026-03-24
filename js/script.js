@@ -122,7 +122,18 @@ function renderizarTabela() {
         const tr = document.createElement("tr");
         tr.dataset.id = time.id;
 
-        tr.style.setProperty("--time-color", coresTimes[time.id] || "#fff");
+        const corTime = coresTimes[time.id] || "#fff";
+        let corDestaque = corTime;
+
+        // define destaque por posição
+        if (index < 4) {
+            corDestaque = "#22c55e"; // verde
+        } else if (index >= 16) {
+            corDestaque = "#ef4444"; // vermelho
+        }
+
+tr.style.setProperty("--time-color", corTime);
+tr.style.setProperty("--highlight-color", corDestaque);
 
         const posAntiga = posicoesAnteriores[time.id];
         let seta = "•";
