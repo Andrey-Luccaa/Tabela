@@ -43,6 +43,13 @@ body::before {
     50% { transform: translate(50px, 30px); }
 }
 
+@media (max-width: 768px) {
+    body {
+        animation: none;
+        background-size: 100% 100%;
+    }
+}
+
 /* --- TÍTULO E LOGO DO BRASILEIRÃO --- */
 .ctitle {
     display: flex;
