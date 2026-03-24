@@ -43,7 +43,7 @@ const coresTimes = {
     santos: "#f0f0f0",
     saopaulo: "#ff2222",
     vasco: "#ffffff",
-    vitoria: "#ff0044"
+    vitoria: "#d70040"
 };
 
 let dadosTimes = [...listaOriginal];
