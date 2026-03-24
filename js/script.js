@@ -123,30 +123,77 @@ function renderizarTabela() {
         tr.dataset.id = time.id;
 
         const corTime = coresTimes[time.id] || "#fff";
-        
-        // --- LÓGICA DE CORES DOS BLOCOS ---
-        let corFundoLinha = "transparent"; // Cor padrão
+
+        // 1. LÓGICA DAS CORES (G4 e Z4)
+        let corFundoLinha = "transparent";
         let corTexto = "inherit";
 
         if (index < 4) {
-            // Quatro primeiros (G4) - Verde
-            corFundoLinha = "#22c55e"; 
+            corFundoLinha = "#22c55e"; // Verde G4
             corTexto = "#ffffff";
         } else if (index >= times.length - 4) {
-            // Quatro últimos (Z4) - Vermelho
-            corFundoLinha = "#ef4444";
+            corFundoLinha = "#ef4444"; // Vermelho Z4
             corTexto = "#ffffff";
         }
 
-        // Aplica os estilos diretamente
         tr.style.backgroundColor = corFundoLinha;
-        if (corFundoLinha !== "transparent") {
-            tr.style.color = corTexto;
+        if (corFundoLinha !== "transparent") tr.style.color = corTexto;
+
+        // 2. LÓGICA DA SETA (O que estava faltando!)
+        const posAntiga = posicoesAnteriores[time.id];
+        let seta = "•";
+        let classeSeta = "same";
+
+        if (posAntiga !== undefined) {
+            if (index < posAntiga) {
+                seta = "↑";
+                classeSeta = "up";
+            } else if (index > posAntiga) {
+                seta = "↓";
+                classeSeta = "down";
+            }
         }
-        
-        // Mantém suas variáveis de CSS caso use em outros lugares (como bordas)
-        tr.style.setProperty("--time-color", corTime);
-        tr.style.setProperty("--highlight-color", corFundoLinha);
+
+        posicoesAnteriores[time.id] = index;
+
+        // 3. RENDERIZAÇÃO DO HTML
+        tr.innerHTML = `
+            <td>
+                <div class="team-info">
+                    <span class="pos-num">${index + 1}º</span>
+                    <img src="image/${time.logo}" class="timelogo">
+                    <span>${time.nome}</span>
+                    <span class="pos-change ${classeSeta}">${seta}</span>
+                </div>
+            </td>
+            <td><strong>${time.pontos}</strong></td>
+            <td>${time.jogos}</td>
+            <td>${time.v}</td>
+            <td>${time.e}</td>
+            <td>${time.d}</td>
+            <td>${time.gp}</td>
+            <td>${time.gc}</td>
+            <td>${time.sg}</td>
+            <td>
+                <div class="aproveitamento-bar">
+                    <div class="fill" style="width:${time.aproveitamento}%"></div>
+                    <span>${time.aproveitamento}%</span>
+                </div>
+            </td>
+        `;
+
+        // Restante do código (event listener de click e appendChild)
+        tr.addEventListener("click", () => {
+            if (clickSound) {
+                clickSound.currentTime = 0;
+                clickSound.play().catch(() => {});
+            }
+            tr.classList.add("clicked");
+            setTimeout(() => tr.classList.remove("clicked"), 400);
+        });
+
+        tbody.appendChild(tr);
+    });
 
         posicoesAnteriores[time.id] = index;
 
