@@ -39,8 +39,8 @@ body {
 }
 
 #logo-brasileirao {
-    width: 60px;
-    transition: 2s linear;
+    width: 120px;
+    transition: 1s linear;
 }
 
 #logo-brasileirao:hover{
