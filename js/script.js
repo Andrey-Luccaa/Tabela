@@ -99,6 +99,8 @@ function renderizarTabela() {
         posicoesAntigasDOM[tr.dataset.id] = tr.getBoundingClientRect().top;
     });
 
+    const primeiraRenderizacao = Object.keys(posicoesAnteriores).length === 0;
+
     const times = dadosTimes.map(t => ({
         ...t,
         pontos: t.v * 3 + t.e,
@@ -122,12 +124,11 @@ function renderizarTabela() {
 
         tr.style.setProperty("--time-color", coresTimes[time.id] || "#fff");
 
-        // setas de posição
         const posAntiga = posicoesAnteriores[time.id];
         let seta = "•";
         let classeSeta = "same";
 
-        if (posAntiga !== undefined) {
+        if (!primeiraRenderizacao && posAntiga !== undefined) {
             if (index < posAntiga) {
                 seta = "↑";
                 classeSeta = "up";
@@ -139,7 +140,6 @@ function renderizarTabela() {
 
         posicoesAnteriores[time.id] = index;
 
-        // classes
         if (index < 4) tr.classList.add("top4", "libertadores");
         else if (index === 4) tr.classList.add("pre-liberta");
         else if (index >= 5 && index <= 10) tr.classList.add("sulamericana");
@@ -183,7 +183,6 @@ function renderizarTabela() {
         tbody.appendChild(tr);
     });
 
-    // animação de movimento
     requestAnimationFrame(() => {
         tbody.querySelectorAll("tr").forEach(tr => {
             const antiga = posicoesAntigasDOM[tr.dataset.id];
@@ -206,7 +205,6 @@ function renderizarTabela() {
     });
 }
 
-// liberar áudio mobile
 document.body.addEventListener("touchstart", () => {
     if (clickSound) {
         clickSound.play().then(() => {
