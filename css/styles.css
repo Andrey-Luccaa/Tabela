@@ -103,7 +103,6 @@ td {
     object-fit: contain;
     object-position: center;
     padding: 4px;
-    background: rgba(255, 255, 255, 0.05);
     display: block;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
