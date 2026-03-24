@@ -97,15 +97,6 @@ td {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* MOBILE */
-@media (max-width: 768px) {
-    .timelogo {
-        width: 60px;
-        height: 60px;
-        padding: 4px;
-    }
-}
-
 .team-info {
     display: flex;
     align-items: center;
@@ -251,8 +242,8 @@ tr.top4::after {
     }
 
     .timelogo {
-        width: 18px;
-        height: 18px;
+        width: 40px;
+        height: 40px;
     }
 
     .aproveitamento-bar {
