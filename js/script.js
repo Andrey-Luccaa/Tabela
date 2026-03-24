@@ -123,27 +123,30 @@ function renderizarTabela() {
         tr.dataset.id = time.id;
 
         const corTime = coresTimes[time.id] || "#fff";
+        
+        // --- LÓGICA DE CORES DOS BLOCOS ---
+        let corFundoLinha = "transparent"; // Cor padrão
+        let corTexto = "inherit";
 
-        let corDestaque = corTime;
-        if (index < 4) corDestaque = "#22c55e";
-        else if (index >= 16) corDestaque = "#ef4444";
-
-        tr.style.setProperty("--time-color", corTime);
-        tr.style.setProperty("--highlight-color", corDestaque);
-
-        const posAntiga = posicoesAnteriores[time.id];
-        let seta = "•";
-        let classeSeta = "same";
-
-        if (!primeiraRenderizacao && posAntiga !== undefined) {
-            if (index < posAntiga) {
-                seta = "↑";
-                classeSeta = "up";
-            } else if (index > posAntiga) {
-                seta = "↓";
-                classeSeta = "down";
-            }
+        if (index < 4) {
+            // Quatro primeiros (G4) - Verde
+            corFundoLinha = "#22c55e"; 
+            corTexto = "#ffffff";
+        } else if (index >= times.length - 4) {
+            // Quatro últimos (Z4) - Vermelho
+            corFundoLinha = "#ef4444";
+            corTexto = "#ffffff";
         }
+
+        // Aplica os estilos diretamente
+        tr.style.backgroundColor = corFundoLinha;
+        if (corFundoLinha !== "transparent") {
+            tr.style.color = corTexto;
+        }
+        
+        // Mantém suas variáveis de CSS caso use em outros lugares (como bordas)
+        tr.style.setProperty("--time-color", corTime);
+        tr.style.setProperty("--highlight-color", corFundoLinha);
 
         posicoesAnteriores[time.id] = index;
 
