@@ -47,6 +47,7 @@ const coresTimes = {
 };
 
 let dadosTimes = [...listaOriginal];
+let posicoesAnteriores = {};
 
 function normalizarTexto(texto) {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
@@ -93,10 +94,9 @@ function renderizarTabela() {
     const tbody = document.querySelector("tbody");
     if (!tbody) return;
 
-    const posicoesAntigas = {};
+    const posicoesAntigasDOM = {};
     tbody.querySelectorAll("tr").forEach(tr => {
-        const id = tr.dataset.id;
-        if (id) posicoesAntigas[id] = tr.getBoundingClientRect().top;
+        posicoesAntigasDOM[tr.dataset.id] = tr.getBoundingClientRect().top;
     });
 
     const times = dadosTimes.map(t => ({
@@ -122,6 +122,24 @@ function renderizarTabela() {
 
         tr.style.setProperty("--time-color", coresTimes[time.id] || "#fff");
 
+        // setas de posição
+        const posAntiga = posicoesAnteriores[time.id];
+        let seta = "•";
+        let classeSeta = "same";
+
+        if (posAntiga !== undefined) {
+            if (index < posAntiga) {
+                seta = "↑";
+                classeSeta = "up";
+            } else if (index > posAntiga) {
+                seta = "↓";
+                classeSeta = "down";
+            }
+        }
+
+        posicoesAnteriores[time.id] = index;
+
+        // classes
         if (index < 4) tr.classList.add("top4", "libertadores");
         else if (index === 4) tr.classList.add("pre-liberta");
         else if (index >= 5 && index <= 10) tr.classList.add("sulamericana");
@@ -133,6 +151,7 @@ function renderizarTabela() {
                     <span class="pos-num">${index + 1}º</span>
                     <img src="image/${time.logo}" class="timelogo">
                     <span>${time.nome}</span>
+                    <span class="pos-change ${classeSeta}">${seta}</span>
                 </div>
             </td>
             <td><strong>${time.pontos}</strong></td>
@@ -146,6 +165,7 @@ function renderizarTabela() {
             <td>
                 <div class="aproveitamento-bar">
                     <div class="fill" style="width:${time.aproveitamento}%"></div>
+                    <span>${time.aproveitamento}%</span>
                 </div>
             </td>
         `;
@@ -157,7 +177,7 @@ function renderizarTabela() {
             }
 
             tr.classList.add("clicked");
-            setTimeout(() => tr.classList.remove("clicked"), 300);
+            setTimeout(() => tr.classList.remove("clicked"), 400);
         });
 
         tbody.appendChild(tr);
@@ -166,8 +186,7 @@ function renderizarTabela() {
     // animação de movimento
     requestAnimationFrame(() => {
         tbody.querySelectorAll("tr").forEach(tr => {
-            const id = tr.dataset.id;
-            const antiga = posicoesAntigas[id];
+            const antiga = posicoesAntigasDOM[tr.dataset.id];
             const nova = tr.getBoundingClientRect().top;
 
             if (antiga !== undefined && antiga !== nova) {
@@ -187,7 +206,7 @@ function renderizarTabela() {
     });
 }
 
-// liberar áudio no mobile
+// liberar áudio mobile
 document.body.addEventListener("touchstart", () => {
     if (clickSound) {
         clickSound.play().then(() => {
