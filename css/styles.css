@@ -41,11 +41,11 @@ body {
     width: 60px;
 }
 
-/* TABELA */
+/* TABELA CONTAINER */
 .table-container {
     max-width: 1000px;
     margin: auto;
-    background: rgba(30, 41, 59, 0.8);
+    background: rgba(30, 41, 59, 0.85);
     backdrop-filter: blur(10px);
     border-radius: 15px;
     overflow: hidden;
@@ -74,6 +74,26 @@ td {
     font-size: 14px;
 }
 
+/* TEAM INFO (LOGO + NOME) */
+.team-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pos-num {
+    width: 30px;
+    font-weight: bold;
+    color: #94a3b8;
+}
+
+.timelogo {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+/* LINHA */
 tr {
     position: relative;
     cursor: pointer;
@@ -149,18 +169,6 @@ tr.top4::after {
     transition: width 0.5s ease;
 }
 
-/* TEAM INFO (se quiser usar depois) */
-.team-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.timelogo {
-    width: 20px;
-    height: 20px;
-}
-
 /* MOBILE */
 @media (max-width: 768px) {
 
@@ -176,6 +184,11 @@ tr.top4::after {
     th, td {
         font-size: 12px;
         padding: 8px;
+    }
+
+    .timelogo {
+        width: 18px;
+        height: 18px;
     }
 
     .aproveitamento-bar {
