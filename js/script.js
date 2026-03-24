@@ -65,7 +65,6 @@ async function carregarDadosDaPlanilha() {
         linhas.forEach(l => {
             const sep = l.includes(";") ? ";" : ",";
             const col = l.split(sep);
-
             const nome = normalizarTexto((col[1] || "").replace(/"/g, ""));
 
             mapa[nome] = {
@@ -83,9 +82,8 @@ async function carregarDadosDaPlanilha() {
         });
 
         renderizarTabela();
-
     } catch (e) {
-        console.error("Erro:", e);
+        console.error("Erro ao carregar dados:", e);
         renderizarTabela();
     }
 }
@@ -94,6 +92,7 @@ function renderizarTabela() {
     const tbody = document.querySelector("tbody");
     if (!tbody) return;
 
+    // Guardar posições para animação
     const posicoesAntigasDOM = {};
     tbody.querySelectorAll("tr").forEach(tr => {
         posicoesAntigasDOM[tr.dataset.id] = tr.getBoundingClientRect().top;
@@ -101,6 +100,7 @@ function renderizarTabela() {
 
     const primeiraRenderizacao = Object.keys(posicoesAnteriores).length === 0;
 
+    // Calcular pontos e ordenar
     const times = dadosTimes.map(t => ({
         ...t,
         pontos: t.v * 3 + t.e,
@@ -122,29 +122,37 @@ function renderizarTabela() {
         const tr = document.createElement("tr");
         tr.dataset.id = time.id;
 
-        const corTime = coresTimes[time.id] || "#fff";
-
-        // 1. LÓGICA DAS CORES (G4 e Z4)
+        // 1. Definição de Cores e Classes (G4 e Z4)
         let corFundoLinha = "transparent";
         let corTexto = "inherit";
 
         if (index < 4) {
+            tr.classList.add("top4", "libertadores");
             corFundoLinha = "#22c55e"; // Verde G4
             corTexto = "#ffffff";
+        } else if (index === 4) {
+            tr.classList.add("pre-liberta");
+        } else if (index >= 5 && index <= 10) {
+            tr.classList.add("sulamericana");
         } else if (index >= times.length - 4) {
+            tr.classList.add("rebaixamento");
             corFundoLinha = "#ef4444"; // Vermelho Z4
             corTexto = "#ffffff";
         }
 
+        // Aplicar estilos visuais
         tr.style.backgroundColor = corFundoLinha;
         if (corFundoLinha !== "transparent") tr.style.color = corTexto;
+        
+        const corTimeEscudo = coresTimes[time.id] || "#fff";
+        tr.style.setProperty("--time-color", corTimeEscudo);
 
-        // 2. LÓGICA DA SETA (O que estava faltando!)
+        // 2. Lógica da Setinha de Posição
         const posAntiga = posicoesAnteriores[time.id];
         let seta = "•";
         let classeSeta = "same";
 
-        if (posAntiga !== undefined) {
+        if (!primeiraRenderizacao && posAntiga !== undefined) {
             if (index < posAntiga) {
                 seta = "↑";
                 classeSeta = "up";
@@ -153,10 +161,9 @@ function renderizarTabela() {
                 classeSeta = "down";
             }
         }
-
         posicoesAnteriores[time.id] = index;
 
-        // 3. RENDERIZAÇÃO DO HTML
+        // 3. Gerar o HTML da linha
         tr.innerHTML = `
             <td>
                 <div class="team-info">
@@ -182,7 +189,7 @@ function renderizarTabela() {
             </td>
         `;
 
-        // Restante do código (event listener de click e appendChild)
+        // Evento de Clique
         tr.addEventListener("click", () => {
             if (clickSound) {
                 clickSound.currentTime = 0;
@@ -195,62 +202,15 @@ function renderizarTabela() {
         tbody.appendChild(tr);
     });
 
-        posicoesAnteriores[time.id] = index;
-
-        if (index < 4) tr.classList.add("top4", "libertadores");
-        else if (index === 4) tr.classList.add("pre-liberta");
-        else if (index >= 5 && index <= 10) tr.classList.add("sulamericana");
-        else if (index >= 16) tr.classList.add("rebaixamento");
-
-        tr.innerHTML = `
-            <td>
-                <div class="team-info">
-                    <span class="pos-num">${index + 1}º</span>
-                    <img src="image/${time.logo}" class="timelogo">
-                    <span>${time.nome}</span>
-                    <span class="pos-change ${classeSeta}">${seta}</span>
-                </div>
-            </td>
-            <td><strong>${time.pontos}</strong></td>
-            <td>${time.jogos}</td>
-            <td>${time.v}</td>
-            <td>${time.e}</td>
-            <td>${time.d}</td>
-            <td>${time.gp}</td>
-            <td>${time.gc}</td>
-            <td>${time.sg}</td>
-            <td>
-                <div class="aproveitamento-bar">
-                    <div class="fill" style="width:${time.aproveitamento}%"></div>
-                    <span>${time.aproveitamento}%</span>
-                </div>
-            </td>
-        `;
-
-        tr.addEventListener("click", () => {
-            if (clickSound) {
-                clickSound.currentTime = 0;
-                clickSound.play().catch(() => {});
-            }
-
-            tr.classList.add("clicked");
-            setTimeout(() => tr.classList.remove("clicked"), 400);
-        });
-
-        tbody.appendChild(tr);
-    });
-
+    // 4. Animação de Movimentação Suave (FLIP)
     requestAnimationFrame(() => {
         tbody.querySelectorAll("tr").forEach(tr => {
             const antiga = posicoesAntigasDOM[tr.dataset.id];
             const nova = tr.getBoundingClientRect().top;
-
             if (antiga !== undefined && antiga !== nova) {
                 const delta = antiga - nova;
-
                 tr.style.transition = "none";
                 tr.style.transform = `translateY(${delta}px)`;
-
                 requestAnimationFrame(() => {
                     tr.style.transition = window.innerWidth <= 768
                         ? "transform 0.3s ease-out"
@@ -262,6 +222,7 @@ function renderizarTabela() {
     });
 }
 
+// Iniciar Áudio para Mobile e Carregar Dados
 document.body.addEventListener("touchstart", () => {
     if (clickSound) {
         clickSound.play().then(() => {
