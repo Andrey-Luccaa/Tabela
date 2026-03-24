@@ -1,35 +1,24 @@
-@font-face {
-    font-family: 'Unispace';
-    src: url('../font/Unispace Rg.otf') format('opentype'); 
-    font-weight: normal;
-    font-style: normal;
-}
-
+/* RESET */
 * {
-    padding: 0;
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
+/* BODY */
 body {
     min-height: 100vh;
     color: white;
+    font-family: 'Unispace', sans-serif;
+
     background: linear-gradient(-45deg, #020617, #0f172a, #1e293b, #020617);
     background-size: 400% 400%;
-    font-family: 'Unispace', sans-serif; 
-    animation: gradientSmooth 18s ease-in-out infinite;
+    animation: gradientSmooth 15s ease-in-out infinite;
+
     overflow-x: hidden;
 }
 
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at 30% 20%, rgba(59,130,246,0.15), transparent 60%);
-    animation: glowMove 12s ease-in-out infinite;
-    pointer-events: none;
-}
-
+/* ANIMAÇÃO FUNDO */
 @keyframes gradientSmooth {
     0% { background-position: 0% 50%; }
     25% { background-position: 50% 100%; }
@@ -38,181 +27,158 @@ body::before {
     100% { background-position: 0% 50%; }
 }
 
-@keyframes glowMove {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(50px, 30px); }
+/* HEADER */
+.ctitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px;
+    text-align: center;
 }
 
+#logo-brasileirao {
+    width: 60px;
+}
+
+/* TABELA */
+.table-container {
+    max-width: 1000px;
+    margin: auto;
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* HEADER TABELA */
+thead {
+    background: #020617;
+}
+
+th {
+    padding: 12px;
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+/* LINHAS */
+td {
+    padding: 10px;
+    font-size: 14px;
+}
+
+tr {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+    will-change: transform;
+}
+
+tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+tr:active {
+    transform: scale(0.98);
+}
+
+/* CLICK EFFECT */
+tr.clicked {
+    animation: clickGlow 0.3s ease;
+}
+
+@keyframes clickGlow {
+    0% { box-shadow: 0 0 0px var(--time-color); }
+    50% { box-shadow: 0 0 15px var(--time-color); }
+    100% { box-shadow: 0 0 0px var(--time-color); }
+}
+
+/* TOP 4 GLOW */
+tr.top4::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, var(--time-color), transparent 70%);
+    opacity: 0.15;
+    filter: blur(12px);
+    pointer-events: none;
+    animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.25; }
+}
+
+/* BORDAS POR COMPETIÇÃO */
+.libertadores {
+    border-left: 4px solid #22c55e;
+}
+
+.pre-liberta {
+    border-left: 4px solid #eab308;
+}
+
+.sulamericana {
+    border-left: 4px solid #3b82f6;
+}
+
+.rebaixamento {
+    border-left: 4px solid #ef4444;
+}
+
+/* APROVEITAMENTO */
+.aproveitamento-bar {
+    position: relative;
+    background: #020617;
+    border-radius: 6px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.aproveitamento-bar .fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #3b82f6);
+    transition: width 0.5s ease;
+}
+
+/* TEAM INFO (se quiser usar depois) */
+.team-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.timelogo {
+    width: 20px;
+    height: 20px;
+}
+
+/* MOBILE */
 @media (max-width: 768px) {
+
     body {
         animation: none;
         background-size: 100% 100%;
     }
-}
 
-/* --- TÍTULO E LOGO DO BRASILEIRÃO --- */
-.ctitle {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 30px 0;
-    text-align: center;
-}
+    .ctitle {
+        flex-direction: column;
+    }
 
-.ititle img {
-    width: 130px;
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    cursor: pointer;
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
-}
+    th, td {
+        font-size: 12px;
+        padding: 8px;
+    }
 
-.ititle img:hover { 
-    transform: scale(1.15) rotate(2deg); 
-    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.5));
+    .aproveitamento-bar {
+        height: 12px;
+    }
 }
-
-/* --- CONTAINER DA TABELA --- */
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-    padding: 0 20px 80px 20px;
-}
-
-table {
-    width: 100%;
-    max-width: 1150px;
-    margin: 20px auto;
-    border-collapse: collapse;
-    backdrop-filter: blur(15px); /* Efeito Vidro Profundo */
-    background: rgba(255, 255, 255, 0.03); 
-    box-shadow: 0px 25px 50px rgba(0, 0, 0, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-/* --- ESTILO DAS LINHAS E CÉLULAS --- */
-tr {
-    transition: all 0.4s ease;
-}
-
-th, td {
-    padding: 15px 12px;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-#titulos th {
-    background: rgba(0, 0, 0, 0.85);
-    font-size: 0.85rem;
-    color: #00d9ff; /* Azul Ciano para os títulos */
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Coluna Principal (Posição e Nome do Time) */
-td:first-child {
-    text-align: left;
-    min-width: 250px;
-    background: rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-}
-
-.team-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.pos-num {
-    min-width: 40px;
-    font-weight: bold;
-    opacity: 0.4;
-    font-size: 0.85rem;
-    transition: opacity 0.3s;
-}
-
-.timelogo {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.team-info span:last-child {
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-/* --- EFEITO HOVER VIBRANTE (Onde a mágica acontece) --- */
-tr:hover {
-    background: rgba(255, 255, 255, 0.08);
-}
-
-tr:hover .pos-num {
-    opacity: 1;
-    color: var(--time-color);
-}
-
-tr:hover .timelogo {
-    transform: translateX(10px) scale(1.3);
-    filter: drop-shadow(0 0 12px var(--time-color)) brightness(1.2);
-}
-
-tr:hover .team-info span:last-child {
-    transform: translateX(12px);
-    color: #fff;
-    /* Brilho duplo: a cor do time + um brilho branco central */
-    text-shadow: 0 0 15px var(--time-color), 0 0 5px #ffffff;
-}
-
-/* --- DESTAQUES DE COLUNA --- */
-/* Coluna de Pontos (P) */
-td:nth-child(2) {
-    font-weight: bold;
-    color: #00ff88; /* Verde Neon padrão */
-    font-size: 1.1rem;
-    text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
-}
-
-/* --- ELEMENTOS EDITÁVEIS --- */
-[contenteditable="true"] {
-    background: rgba(255, 255, 255, 0.07);
-    border-radius: 4px;
-    outline: none;
-    transition: 0.3s;
-}
-
-[contenteditable="true"]:focus {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 15px var(--time-color, white);
-}
-
-/* Linha inteira em destaque ao editar */
-tr:has([contenteditable="true"]:focus) {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-/* --- BOTÕES --- */
-.btn-reset {
-    margin-top: 20px;
-    padding: 12px 25px;
-    cursor: pointer;
-    background: transparent;
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
-    font-family: 'Unispace', sans-serif;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-}
-
-.btn-reset:hover {
-    background: white;
-    color: #05014a;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
-}
-
