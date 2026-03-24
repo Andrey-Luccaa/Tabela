@@ -100,29 +100,21 @@ td {
 .timelogo {
     width: clamp(28px, 5vw, 42px);
     height: clamp(28px, 5vw, 42px);
-
     object-fit: contain;
     object-position: center;
-
     padding: 4px;
-
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 50%;
-
     display: block;
-
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* CLICK NO LOGO (EFEITO FORTE) */
 tr.clicked .timelogo {
     transform: scale(1.4);
-
     box-shadow: 
         inset 0 0 14px var(--time-color),
         inset 0 0 25px var(--time-color),
         0 0 12px var(--time-color);
-
     background: rgba(255, 255, 255, 0.08);
 }
 
