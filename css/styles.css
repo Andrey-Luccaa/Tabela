@@ -410,6 +410,10 @@ tr.top4::after {
         align-items: center;
     }
 
+    .table-container{
+        mex-width: 75%;
+    }
+    
     .rodada {
         width: 100%;
         max-width: 1000px;
