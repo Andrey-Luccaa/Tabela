@@ -460,4 +460,23 @@ tr.top4::after {
     td:nth-child(10){
         display: none; /* esconde colunas menos importantes */
     }
+    /* NÃO deixa a posição cortar */
+.pos-num {
+    flex-shrink: 0;
+    width: auto;
+    overflow: visible;
+}
+
+/* NÃO corta a seta */
+.pos-change {
+    flex-shrink: 0;
+}
+
+/* APLICA ellipsis SÓ no nome do time */
+.team-info span:nth-child(3) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90px;
+}
 }
