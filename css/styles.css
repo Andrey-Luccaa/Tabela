@@ -410,8 +410,27 @@ tr.top4::after {
         align-items: center;
     }
 
-    .table-container{
-        mex-width: 75%;
+    team-info {
+        gap: 6px;
+    }
+
+    .pos-num {
+        width: 22px;
+        font-size: 11px;
+    }
+
+    .team-info span {
+        max-width: 80px; /* evita estourar */
+        font-size: 11px;
+    }
+
+    .timelogo {
+        width: 32px;
+        height: 32px;
+    }
+
+    td:first-child {
+        max-width: 160px;
     }
     
     .rodada {
