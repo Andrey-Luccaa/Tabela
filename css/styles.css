@@ -454,8 +454,8 @@ tr.top4::after {
         height: 12px;
         font-size: 10px;
     }
-    th:nth-child(n+6),
-    td:nth-child(n+6) {
+    th:nth-child,
+    td:nth-child {
         display: none; /* esconde colunas menos importantes */
     }
 }
