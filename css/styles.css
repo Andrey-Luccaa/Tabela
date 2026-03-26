@@ -419,9 +419,11 @@ tr.top4::after {
         font-size: 11px;
     }
 
-    .team-info span {
-        max-width: 80px; /* evita estourar */
-        font-size: 11px;
+    .team-info span:nth-child(3) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90px;
     }
 
     .timelogo {
@@ -451,5 +453,9 @@ tr.top4::after {
     .aproveitamento-bar {
         height: 12px;
         font-size: 10px;
+    }
+    th:nth-child(n+6),
+    td:nth-child(n+6) {
+        display: none; /* esconde colunas menos importantes */
     }
 }
