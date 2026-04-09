@@ -33,7 +33,8 @@ const coresTimes = {
     santos:"#F0F0F0",saopaulo:"#ff2222",vasco:"#F0F0F0",vitoria:"#ae0c00"
 };
 
-let dadosTimes = [...listaOriginal];
+// clone seguro
+let dadosTimes = listaOriginal.map(t => ({ ...t }));
 let posicoesAnteriores = {};
 
 // ================= JOGOS =================
@@ -51,21 +52,20 @@ function pegarTimePorNome(nome){
 
 function atualizarUltimos(time, resultado) {
     time.ultimos.push(resultado);
-
     if (time.ultimos.length > 5) {
-        time.ultimos.shift(); // mantém só os últimos 5
+        time.ultimos.shift();
     }
 }
 
 function formatarUltimos(lista) {
     return lista.map(r => {
-        if (r === "V") return '<span class="vitoria">●</span>';
-        if (r === "D") return '<span class="derrota">●</span>';
-        return '<span class="empate">●</span>';
+        if (r === "V") return '<span class="vitoria"></span>';
+        if (r === "D") return '<span class="derrota"></span>';
+        return '<span class="empate"></span>';
     }).join("");
 }
 
-// ================= TABELA =================
+// ================= DADOS =================
 async function carregarDadosDaPlanilha() {
     try {
         const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuYYrJrM1Ozyzllocl72jV0AsJON6oWCsQCvhIC0oE4mJWrcrcDFYq_ghSFwjxX2fsYtFi_i2vmHD-/pub?output=csv&gid=2083338507";
@@ -130,7 +130,7 @@ async function carregarJogosDaPlanilha(){
                 fora: normalizarTexto(col[2]),
                 golsCasa,
                 golsFora,
-                bloqueado: golsCasa !== null && golsFora !== null // 🔒 ESSENCIAL
+                bloqueado: golsCasa !== null && golsFora !== null
             });
         });
         
@@ -140,7 +140,6 @@ async function carregarJogosDaPlanilha(){
     }catch(e){
         console.error("Erro jogos:", e);
     }
-
 }
 
 // ================= RODADAS =================
@@ -159,6 +158,7 @@ function renderizarRodada(){
     renderizarJogos(jogos);
 }
 
+// ================= TABELA =================
 function renderizarTabela() {
     const tbody = document.querySelector("tbody");
     if (!tbody) return;
@@ -209,11 +209,6 @@ function renderizarTabela() {
 
         posicoesAnteriores[time.id] = index;
 
-        if (index < 4) tr.classList.add("top4", "libertadores");
-        else if (index === 4) tr.classList.add("pre-liberta");
-        else if (index >= 5 && index <= 10) tr.classList.add("sulamericana");
-        else if (index >= 16) tr.classList.add("rebaixamento");
-
         tr.innerHTML = `
             <td>
                 <div class="team-info">
@@ -244,131 +239,31 @@ function renderizarTabela() {
             </td>
         `;
 
-        tr.addEventListener("click", () => {
-            if (clickSound) {
-                clickSound.currentTime = 0;
-                clickSound.play().catch(() => {});
-            }
-
-            tr.classList.add("clicked");
-            setTimeout(() => tr.classList.remove("clicked"), 400);
-        });
-
         tbody.appendChild(tr);
     });
-
-    requestAnimationFrame(() => {
-        tbody.querySelectorAll("tr").forEach(tr => {
-            const antiga = posicoesAntigasDOM[tr.dataset.id];
-            const nova = tr.getBoundingClientRect().top;
-
-            if (antiga !== undefined && antiga !== nova) {
-                const delta = antiga - nova;
-
-                tr.style.transition = "none";
-                tr.style.transform = `translateY(${delta}px)`;
-
-                requestAnimationFrame(() => {
-                    tr.style.transition = window.innerWidth <= 768
-                        ? "transform 0.3s ease-out"
-                        : "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
-                    tr.style.transform = "translateY(0)";
-                });
-            }
-        });
-    });
 }
 
-// ================= RENDER JOGOS =================
-function renderizarJogos(jogos){
-    const container = document.getElementById("listaJogos");
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    jogos.forEach(j=>{
-        const casa = pegarTimePorNome(j.casa);
-        const fora = pegarTimePorNome(j.fora);
-        if (!casa || !fora) return;
-
-        const div = document.createElement("div");
-        div.classList.add("jogo");
-
-        // se estiver bloqueado adiciona classe visual
-        if (j.bloqueado) {
-            div.classList.add("jogo-bloqueado");
-        }
-
-        div.innerHTML = `
-            <div class="time casa">
-                <img src="image/${casa.logo}">
-                <span>${casa.nome}</span>
-            </div>
-
-            <div class="placar-input">
-                <input 
-                    type="number" 
-                    min="0" 
-                    value="${j.golsCasa ?? ""}" 
-                    class="input-gol casa"
-                    ${j.bloqueado ? "disabled" : ""}
-                >
-
-                <span>x</span>
-
-                <input 
-                    type="number" 
-                    min="0" 
-                    value="${j.golsFora ?? ""}" 
-                    class="input-gol fora"
-                    ${j.bloqueado ? "disabled" : ""}
-                >
-            </div>
-
-            <div class="time fora">
-                <span>${fora.nome}</span>
-                <img src="image/${fora.logo}">
-            </div>
-        `;
-
-        const inputCasa = div.querySelector(".input-gol.casa");
-        const inputFora = div.querySelector(".input-gol.fora");
-
-        function atualizar() {
-            // 🔒 segurança extra
-            if (j.bloqueado) return;
-
-            if (clickSound) {
-                clickSound.currentTime = 0;
-                clickSound.play().catch(()=>{});
-            }
-
-            j.golsCasa = inputCasa.value === "" ? null : parseInt(inputCasa.value);
-            j.golsFora = inputFora.value === "" ? null : parseInt(inputFora.value);
-
-            atualizarTabelaComJogos();
-        }
-
-        inputCasa.addEventListener("input", atualizar);
-        inputFora.addEventListener("input", atualizar);
-
-        container.appendChild(div);
-    });
-}
-
+// ================= JOGOS =================
 function atualizarTabelaComJogos() {
-    // resetar stats
+    // reset completo
     dadosTimes = listaOriginal.map(t => ({
         ...t,
         v: 0, e: 0, d: 0,
-        gp: 0, gc: 0
+        gp: 0, gc: 0,
+        ultimos: []
     }));
+
+    // mapa otimizado
+    const mapa = {};
+    dadosTimes.forEach(t => {
+        mapa[normalizarTexto(t.nome)] = t;
+    });
 
     todosJogos.forEach(j => {
         if (j.golsCasa == null || j.golsFora == null) return;
 
-        const casa = dadosTimes.find(t => normalizarTexto(t.nome) === j.casa);
-        const fora = dadosTimes.find(t => normalizarTexto(t.nome) === j.fora);
+        const casa = mapa[j.casa];
+        const fora = mapa[j.fora];
 
         if (!casa || !fora) return;
 
@@ -381,12 +276,23 @@ function atualizarTabelaComJogos() {
         if (j.golsCasa > j.golsFora) {
             casa.v++;
             fora.d++;
+
+            atualizarUltimos(casa, "V");
+            atualizarUltimos(fora, "D");
+
         } else if (j.golsCasa < j.golsFora) {
             fora.v++;
             casa.d++;
+
+            atualizarUltimos(fora, "V");
+            atualizarUltimos(casa, "D");
+
         } else {
             casa.e++;
             fora.e++;
+
+            atualizarUltimos(casa, "E");
+            atualizarUltimos(fora, "E");
         }
     });
 
@@ -394,14 +300,5 @@ function atualizarTabelaComJogos() {
 }
 
 // ================= INIT =================
-document.body.addEventListener("touchstart", () => {
-    if (clickSound) {
-        clickSound.play().then(() => {
-            clickSound.pause();
-            clickSound.currentTime = 0;
-        }).catch(() => {});
-    }
-}, { once: true });
-
 carregarDadosDaPlanilha();
 carregarJogosDaPlanilha();
