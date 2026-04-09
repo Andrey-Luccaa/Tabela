@@ -141,6 +141,20 @@ body {
     background: #111827;
 }
 
+.ultimos {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+td.ultimos {
+    text-align: center;
+    vertical-align: middle;
+}
+
 /* JOGOS */
 .jogo {
     display: flex;
