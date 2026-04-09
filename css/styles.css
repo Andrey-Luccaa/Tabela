@@ -99,10 +99,17 @@ body {
 }
 
 .jogo {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+
+    padding: 12px;
+    margin-bottom: 10px;
+
+    background: #020617;
+    border-radius: 10px;
+
+    transition: 0.25s;
 }
 
 .jogo:hover {
@@ -114,7 +121,6 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    width: 120px; /* 🔥 largura fixa */
 }
 
 .time.casa {
@@ -123,14 +129,6 @@ body {
 
 .time.fora {
     justify-content: flex-end;
-    text-align: right;
-}
-
-.time span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 80px;
 }
 
 .placar {
@@ -139,20 +137,6 @@ body {
     padding: 4px 10px;
     border-radius: 6px;
     background: #111827;
-}
-
-.ultimos {
-    display: flex;
-    gap: 4px;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
-
-td.ultimos {
-    text-align: center;
-    vertical-align: middle;
 }
 
 /* JOGOS */
@@ -253,6 +237,39 @@ td {
     width: 34px;
     height: 34px;
     object-fit: contain;
+}
+
+.ultimos {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+td.ultimos {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.vitoria {
+    color: #00c853;
+}
+
+.derrota {
+    color: #d50000;
+}
+
+.empate {
+    color: #ffd600;
+}
+
+.vitoria, .derrota, .empate {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 .placar-input {
@@ -426,31 +443,6 @@ tr.top4::after {
         align-items: center;
     }
 
-    team-info {
-        gap: 6px;
-    }
-
-    .pos-num {
-        width: 22px;
-        font-size: 11px;
-    }
-
-    .team-info span:nth-child(3) {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 90px;
-    }
-
-    .timelogo {
-        width: 32px;
-        height: 32px;
-    }
-
-    td:first-child {
-        max-width: 160px;
-    }
-    
     .rodada {
         width: 100%;
         max-width: 1000px;
@@ -470,27 +462,4 @@ tr.top4::after {
         height: 12px;
         font-size: 10px;
     }
-    /*th:nth-child(10),
-    td:nth-child(10){
-        display: none; /* esconde colunas menos importantes */
-    }
-    /* NÃO deixa a posição cortar */
-.pos-num {
-    flex-shrink: 0;
-    width: auto;
-    overflow: visible;
-}
-
-/* NÃO corta a seta */
-.pos-change {
-    flex-shrink: 0;
-}
-
-/* APLICA ellipsis SÓ no nome do time */
-.team-info span:nth-child(3) {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 90px;
-}
 }
