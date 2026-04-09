@@ -59,9 +59,9 @@ function atualizarUltimos(time, resultado) {
 
 function formatarUltimos(lista) {
     return lista.map(r => {
-        if (r === "V") return '<span class="vitoria">●</span>';
-        if (r === "D") return '<span class="derrota">●</span>';
-        return '<span class="empate">●</span>';
+        if (r === "V") return '<span class="vitoria"><i class="bi bi-check-circle-fill"></i></span>';
+        if (r === "D") return '<span class="derrota"><i class="bi bi-x-circle-fill"></i></span>';
+        return '<span class="empate"><i class="bi bi-ban-fill"></i></span>';
     }).join("");
 }
 
@@ -237,8 +237,10 @@ function renderizarTabela() {
                     <span>${time.aproveitamento}%</span>
                 </div>
             </td>
-            <td class="ultimos">
+            <td>
+                <div class="ultimos">
                     ${formatarUltimos(time.ultimos)}
+                </div>
             </td>
         `;
 
@@ -359,7 +361,8 @@ function atualizarTabelaComJogos() {
     dadosTimes = listaOriginal.map(t => ({
         ...t,
         v: 0, e: 0, d: 0,
-        gp: 0, gc: 0
+        gp: 0, gc: 0,
+        ultimos: []
     }));
 
     todosJogos.forEach(j => {
@@ -379,12 +382,19 @@ function atualizarTabelaComJogos() {
         if (j.golsCasa > j.golsFora) {
             casa.v++;
             fora.d++;
+            atualizarUltimos(casa, "V");
+            atualizarUltimos(fora, "D");
+
         } else if (j.golsCasa < j.golsFora) {
             fora.v++;
             casa.d++;
+            atualizarUltimos(casa, "V");
+            atualizarUltimos(fora, "D");
         } else {
             casa.e++;
             fora.e++;
+            atualizarUltimos(casa, "E");
+            atualizarUltimos(fora, "E");
         }
     });
 
