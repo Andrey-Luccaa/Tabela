@@ -27,10 +27,10 @@ const listaOriginal = [
 
 const coresTimes = {
     athletico:"#ff0033",atleticomg:"#F0F0F0",bahia:"#00a2ff",botafogo:"#e0e0e0",
-    bragantino:"#ff4d4d",chapecoense:"#00ff73",corinthians:"#F0F0F0",coritiba:"#00ff88",
+    bragantino:"#ff0000",chapecoense:"#00ff73",corinthians:"#F0F0F0",coritiba:"#00ff88",
     cruzeiro:"#2e66ff",flamengo:"#ff0000",fluminense:"#ff0055",gremio:"#00d9ff",
     internacional:"#ff1100",mirassol:"#ffe600",palmeiras:"#00ff44",remo:"#3366ff",
-    santos:"#F0F0F0",saopaulo:"#ff2222",vasco:"#F0F0F0",vitoria:"#ae0c00"
+    santos:"#F0F0F0",saopaulo:"#ff2222",vasco:"#F0F0F0",vitoria:"#ff0000"
 };
 
 let dadosTimes = [...listaOriginal];
@@ -190,6 +190,8 @@ function renderizarTabela() {
     times.forEach((time, index) => {
         const tr = document.createElement("tr");
         tr.dataset.id = time.id;
+        
+        tr.style.animationDelay = `${index * 0.03}s`;
 
         tr.style.setProperty("--time-color", coresTimes[time.id] || "#fff");
 
@@ -244,15 +246,33 @@ function renderizarTabela() {
             </td>
         `;
 
-        tr.addEventListener("click", () => {
-            if (clickSound) {
-                clickSound.currentTime = 0;
-                clickSound.play().catch(() => {});
-            }
+        tr.addEventListener("click", (e) => {
 
-            tr.classList.add("clicked");
-            setTimeout(() => tr.classList.remove("clicked"), 400);
-        });
+    // SOM
+    if (clickSound) {
+        clickSound.currentTime = 0;
+        clickSound.play().catch(() => {});
+    }
+
+    // ANIMAÇÃO GLOW
+    tr.classList.add("clicked");
+    setTimeout(() => tr.classList.remove("clicked"), 500);
+
+    // RIPPLE
+    const ripple = document.createElement("span");
+    ripple.classList.add("ripple");
+
+    const rect = tr.getBoundingClientRect();
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    const y = e.touches ? e.touches[0].clientY : e.clientY;
+
+    ripple.style.left = `${x - rect.left}px`;
+    ripple.style.top = `${y - rect.top}px`;
+
+    tr.appendChild(ripple);
+
+    setTimeout(() => ripple.remove(), 600);
+});
 
         tbody.appendChild(tr);
     });
@@ -388,8 +408,8 @@ function atualizarTabelaComJogos() {
         } else if (j.golsCasa < j.golsFora) {
             fora.v++;
             casa.d++;
-            atualizarUltimos(casa, "V");
-            atualizarUltimos(fora, "D");
+            atualizarUltimos(casa, "D");
+            atualizarUltimos(fora, "V");
         } else {
             casa.e++;
             fora.e++;
